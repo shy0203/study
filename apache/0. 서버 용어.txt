@@ -1,0 +1,32 @@
+### localhost(127.0.0.1): 사용하고있는 컴퓨터
+
+### DNS(Domain Name System): host의 도메인 이름을 host의 네트워크 주소로 바꾸거나 반대의 변환을 수행
+
+### proxy server: 
+	- web proxy server는 Client의 입장에서 트랜잭션을 수행하는 중개인
+	
+
+### HTTP(Hyper Text Transfer Protocol): web application layer protocol
+	1. HTTP 1.0: 연결마다 1개의 오브젝트 전송
+	2. HTTP 1.1: 여러개의 오브젝트를 전송
+
+### Client: server model
+
+### ISP(Internet Service Provider): 인터넷에 접속하는 수단을 제공하는 주체를 가리키는 말. 
+	1. 1단계 ISP (Tier 1)
+		- 다른 ISP와 인터넷 트래픽을 교환하는 인터넷 제공 업체
+		- 최상위 ISP, 대륙과 국가간에 인터넷 트래픽을 교환
+	2. 2단계 ISP (Tier 2)
+		- 1단계와 3단계를 연결하는 ISP
+		- Tier-2 제공업체는 인터넷 전송 구매 피어링 계약을 통해 인터넷 트래픽을 교환
+	3. 3단계 ISP (Tier 3)
+		- 인터넷 전송을 구매하는 제공 업체
+
+### peering: ISP간 네트워크 연결하고 트래픽을 교환하는 것, BGP를 통한 라우팅 정보의 교환과 네트워크간의 합의가 필요
+
+### BGP(Border GateWay Protocol) : 인터넷에서 주 경로 지정을 담당하는 프로토콜의 한 종류
+
+### MIME(Multipurpose Internet Mail Extensions): 
+	- 전자우편을 위한 인터넷 표준 포맷
+	- Client에게 전송된 문서의 다양성을 알려주기 위한 메커니즘
+

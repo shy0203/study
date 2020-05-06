@@ -1,0 +1,86 @@
+include() : 함수가 실행될 때마다 매개변수로 입력한 파일을 포함
+require() : 함수가 실행될 때마다 매개변수로 입력한 파일을 포함
+include_once() : 함수가 가장 처음 실행될 때만 매개변수로 입력한 파일을 포함하고 그 후론 포함시키지 않음
+
+yearArr = 년도 선택에 사용할 리스트
+
+getInsaAuth() : innoCommon.php에 존재, 인사관리자인지 아닌지 확인
+in_array() : 배열에 요소가 있는지 검사
+getButton(타입, 버튼 이미지, 값, 기능) : 버튼 만들어주는 함수
+
+global : 함수 내에 글로벌 선언은 전역 변수를 함수 내에서도 사용하겠다는 뜻
+celi() : 올림 함수
+getButton(?, ?, 버튼 텍스트, 실행할 함수) : 버튼 추가
+makeSelectBox()
+
+
+<script language='javascript'>
+        function addRow( rOnly, val1, val2, val3, val4, val5 )
+
+중간에 나오는 저 자바스크립트는 뭘까?
+
+	$query = "select * ";
+	$query .= "     ,(select in01_2 from inno01 where in01_1 = $g5[member_table].mbi_departmentcd) department_name "; // 부서명
+	$query .= "     ,(select in01_2 from inno01 where in01_1 = $g5[member_table].mbi_departmentcd2) department_name2 "; // 부서명
+	$query .= "     ,(select in02_2 from inno02 where in02_1 = $g5[member_table].mbi_position_cd) position_name "; // 직위명
+	$query .= "     ,(select in03_2 from inno03 where in03_1 = $g5[member_table].mbi_duty_cd) duty_name "; // 직책명
+	$query .= "from $g5[member_table] where mb_id='$user_id'";
+이 부분은 뭘까?
+
+$input_readonly : 읽기만 가능
+$input : 읽기/수정 가능
+$ishide : 추가 버튼을 화면에 보여줄지 가릴지를 위한 플래그(단계에 따라 변함)
+
+
+
+라인 492 : ksmpy는 누구??
+title : 목적
+flag : 진행상태
+list() : 변수를 생성할 때 배열로 생성함
+491 $flag = $arrFlag[$data[flag]];
+
+input의 hidden 타입 : 사용자가 따로 입력하지 않아도 알게 되는 내용들을 작성할 때 사용, 화면에 출력되지는 않지만 값을 가지고 있음
+
+EditNo : 신규 등록인지 수정인지 확인하기 위한것 0이면 신규등록, 아니면 수정
+
+
+getInsaAuth("PAYEXVIEW", $member, "") : 인사 관리자인지 아닌지 확인하는 함수 느낌
+PAYEXVIEW : 인사관리자만 볼 수 있는 듯?
+expdate = 법적납부기한
+b_blue12_line3 : 색칠된 항목
+b_black12_line : 
+
+
+$qry = sql_query($sql) 
+// 쿼리를 실행하고 결과를 변수 $qry에 배열로 가져옵니다. 
+// $qry['필드명']; 의 형식으로 출력이 가능합니다.  
+
+sql_fetch_array($qry) 
+// 쿼리를 실행한 결과를 배열로 가져옵니다. 
+// 출력을 위해서는 for, foreach, while 반복문을 사용해야합니다.
+
+sql_fetch($sql) 
+// 쿼리를 실행합니다.
+
+document.all.dynTable.insertRow() : 테이블에 행 추가
+document.all.dynTable.deleteRow() : 테이블에 행 제거
+
+addRow() : 지출결의서에 내역 추가하는 함수
+
+<?=$gubun?> : 아마도 셀렉트 리스트를 불러오는 듯함
+nowrap : 주변을 둘러싸는 틀이 있나 없나
+
+
+DB가 단계별로 되어 있는거 같음
+
+
+if ($in_user_id != "" && $data [mb_id] != $in_user_id)
+				$query_user = ",mb_id='$in_user_id' ";
+
+무슨 부분일까?
+
+
+
+
+
+

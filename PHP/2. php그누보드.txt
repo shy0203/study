@@ -1,0 +1,38 @@
+----------------------------- common.php -----------------------------
+### 순서 ###
+	===== 초기 설정 =====
+<?php
+	1. 에러 함수
+		- error_reporting();
+	2. 보안설정이나 프레임이 달라도 쿠키 통하도록 설정
+		- P3P: CP ? 	(참조:https://goodjoon.tistory.com/133)
+	3. set_time_limit
+		- 스크립트 제한시간 설정
+	4. extract()
+		- POST, GET으로 선언된 전역변수가 있다면 unset 시킴 
+	5. g5_path 지정
+		- dirname(__FILE__) : 현재 파일의 폴더지정
+	6. 설정 파일
+		- config.php에 설정후 g5_path unset
+	7. SQL Injection등으로 보호하는 함수 적용
+	8. GET, POST, SERVER 요청 변수 extract()
+
+	===== 공통(그누보드 설치 전) =====
+	9. DB
+		- dbconfig.php	: DB table name 추가
+		- common.lib.php	: 공통 라이브러리 추가
+		- connect_db	: sql_connect();
+		- select_db	: sql_select_db(); database 선택 
+		- connect_db를 g5에 저장
+		- sql_set_charset()	: utf-8
+>
+	10. <!doctype html> 시작
+
+	===== session 설정 =====
+	11. php.ini 동적 설정 	: ini_set()
+	12. session_save_path()	: path 설정 
+	13. 
+
+----------------------------- config.php -----------------------------
+	- define 상수 설정 구간 
+

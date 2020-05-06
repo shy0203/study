@@ -1,0 +1,10 @@
+1. 설치 직후
+	- $mysql -u root -p mysql
+	- 
+
+
+2. 덤프(데이터베이스를 sql문으로 만들어주는 download기능)
+	- 루트 아이디 접속
+	- # mysqldump -u root -p DB이름 > 이름.sql
+	- # mysql -u root -p 복사할 DB 이름 < 이름.sql
+	

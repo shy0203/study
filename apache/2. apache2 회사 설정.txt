@@ -1,0 +1,48 @@
+가상호스트
+==============================================
+### cm 홈페이지 ###
+<VirtualHost *>
+        ServerName cm.innorules.com					// DNS
+#      Redirect /gb5 https://cm.innorules.com/gb5			
+        RewriteEngine on
+        RewriteCond %{SERVER_PORT} !^443$
+        RewriteCond %{REQUEST_URI} !/inno_license\.php
+        RewriteCond %{REQUEST_URI} !/inno_license68\.php
+        RewriteRule ^/(.*) https://%{SERVER_NAME}/$1 [NC,R=301,L]
+        DocumentRoot /home/_webcommon/cm
+        CustomLog /dev/null common
+        AddDefaultCharset       UTF-8
+        <Directory /home/_webcommon/cm>
+                AllowOverride FileInfo AuthConfig Limit
+                Options SymLinksIfOwnerMatch IncludesNoExec
+        </Directory>
+</VirtualHost>
+==============================================
+### cm 홈페이지(모바일) ###
+<VirtualHost *>
+        ServerName mobilecm.innorules.com
+        Redirect / https://cm.innorules.com/
+</VirtualHost>
+==============================================
+### 인증서 ###
+<IfModule mod_ssl.c>
+        <VirtualHost *:443>
+                ServerName cm.innorules.com
+                DocumentRoot /home/_webcommon/cm
+                CustomLog /dev/null common
+                AddDefaultCharset       UTF-8
+                <Directory /home/_webcommon/cm>
+                        AllowOverride FileInfo AuthConfig Limit
+#                       Options SymLinksIfOwnerMatch IncludesNoExec FollowSymLinks
+                        Options IncludesNoExec FollowSymLinks
+                </Directory>
+                <Directory /home/_webcommon/cm/wiki/images>
+                        AllowOverride All
+                        Options IncludesNoExec FollowSymLinks
+                </Directory>
+                SSLEngine on
+                SSLCertificateFile      /etc/letsencrypt/live/innorules.com/cert.pem
+                SSLCertificateKeyFile /etc/letsencrypt/live/innorules.com/privkey.pem
+                SSLCertificateChainFile /etc/letsencrypt/live/innorules.com/chain.pem
+        </VirtualHost>
+</IfModule>                  

@@ -1,0 +1,18 @@
+1. 웹 개발환경에서 권장되는 php 설정
+	- /etc/php/7.0/apache2/ 하위 폴도 현재 적용된 php.ini 수정하면되는데 
+	- 실제 운영환경에서 사용되는 파일은 php.ini이다.
+	- 개발환경에서 작업하려면 /usr/lib/php/7.0/php.ini-development를 위 경로로 복사하면된다. // 버전마다 다 다르니 find를 통해 찾기 바람
+	- php.ini-production파일이 php.ini와 같은 운영 파일이다.
+2. 변경된 사항 반영
+	- 아파지 재시작
+	- sudo service apache2 reload	// 설정만 변경
+	- sudo service apache2 start		// 끄고 설정하고 다시 시작
+3. php.ini 수정
+	- ';'는 php에서 주석
+	1) dispaly_errors (Default: Off)
+		- 원래 php.ini에서는 display_errors가 off 인데, 개발환경으로 복사했기 때문에 on으로 되어있음 	// 웹상에서 에러가 생기면 디버깅 해주는 기능
+	2) log_errors(Default: On)
+		- 실시간 로그 확인: sudo tail -f error.log
+		- access.log 접속자 기록 
+		- Off를 하는 상황: 변경사항, 이벤트가 하나하나 기록하는 것은 많은 사용자가 사용하는 환경에서는 부담이 된다.
+		  성능을 최대한으로 뽑을 때만 Off한다.

@@ -1,0 +1,212 @@
+==================== 설정파일 경로 및 기능 ====================
+
+ /etc/apache2: 
+	- apache2의 설정파일 루트위치(최상위)
+ /etc/apache2/apache2.conf:
+	- 기본 설정파일
+ /etc/apache2/envvars:
+	- apache2ctl 환경설정 파일
+ /etc/apache2/httpd.conf:
+	- 사용자 설정 파일
+ /etc/apache2/magic:
+	- 파일의 시작값(magic number) 데이터베이스. 이 값에 기반해 전송하는 파일의 MIME Type을 결정
+ /etc/apache2/mods-available:
+	- 사용가능한 apache 모듈을 볼러오는 곳
+ /etc/apache2/mods-enabled:
+	- 위 경로의 모듈중에 사용할 모듈을 심볼릭 링크로 추가하여 동작하게함
+	- module 관리
+ /etc/apache2/conf-enabled:
+	- global한 configuration 조각들을 관리
+ /etc/apache2/ports.conf:
+	- Apache 서버의 서비스 포트 설정으로 http의 기본값 80과 https의 기본값 443, 가상호스트의 포트들을 설정할 수 있다.
+ /etc/apache2/sites-avalible:
+	- 서버에서 운영할 사이트의 설정 파일
+ /etc/apache2/sites-enabled:
+	- 위 경로에서 설정한 파일의 심볼릭 링크로 추가하여 실제 운영에 사용할 설정 파일들
+	- virtual host로 관리
+
+==================== 주요기능 옵션 ====================
+
+### .htaccess(hypertext access): 아파치 웹 서버의 디렉토리 레벨을 설정하는 기본 파일
+	- 아파치 세팅을 폴더별로 변경 가능하도록 하는 파일
+	- 주소줄을 간단히 고치는데 사용됨
+	- .htaccess를 사용하려면 rewrite module을 활성화해야한다. (기본값은 활성화 안되어있다.)
+	- rewrite module 활성화 ( sudo a2enmod rewirte)
+	
+### <Directory> 
+	- 웹 서버는 디렉토리 단위로 설정
+	- 모든 디렉토리는 기본적으로 접근하지 못하게 설정되어 있음
+	- option: 디렉토리 이하에 모든 파일과 디렉토리에 적용할 접근 제어를 설정
+		- all		: 모든 옵션 사용
+		- none		: 옵션 없음
+		- indexes		: DirectoryIndex에서 지정한 메인페이지가 없는 경우, 브라우저에서 파일 목록을 보여줌
+			 	 서버 보안을 위해 운영서비스에서는 사용하지 않는것이 바람직하다.(개발용)
+		- Includes	: SSI 사용을 허용하는 설정
+				  (단, mode_include.c 모듈은 반드시 필요하므로 기본적으로 로드되어있음)
+		- IncludesNOEXEC	: SSI 사용은 허용되지만 #exec 사용과 #include는 허용되지 않는다
+				  (즉, SSI를 사용하면서 시스템에 위험한 SSI의 실행태그는 사용하지 않는다.)
+		- FollowSymLinks	: 디렉토리의 심볼릭 링크를 이용, 웹브라우저에서 링크 파일의 경로까지 확인 가능
+				 보안상 설정하지 않는 것이 좋음(개발용)
+		- ExecCGI		: CGI 실행
+	- AllowOverride: 어떻게 접근을 허락할지에 대한 설정(apache2.conf에서 설정된 .htaccess AccessFileName과 관련있음)
+		- None		: AccessFileName에 지정된 파일을 엑세스 인증파일로 인식하지 않음.
+				 제한적인 접근만 허용(보안용)
+		- All		: 이전 인증방식에 대하여 새로운 접근인증방식을 우선 적용하여 override한다.
+		- AuthConfig	: AccessFileName에 대하여 클라이언트 인증지시자 사용을 허용(AuthDBMgroupFile, AuthName, AuthGroupFile, AuthUserFile, require 등)
+		- FileInfo		: AccessFileName 지시자에 명시한 파일(AddEncoding, AddLanguage, AddType, ErrorDocument, LanguagePriority 등)과 같은 문서유형ㅇ르 제어하는 지시자
+		- Indexes		: 디렉토리 indexing을 제어하는 지시자 사용을 허용(AddDesctiption, AddIcon, AddIconMyEncoding, AddIconByType, DefaultIcon, DirectoryIndex, FancyIndexing, HeaderName 등)
+		- Limit 		: allow, deny, order 등 호스트 접근을 제어하는 지시자
+		
+		예시) 
+		<Directory "/app/apache/htdocs"> 
+		Options Indexes FollowSymLinks (바깥에서도 접근 가능하도록 SymLinks 설정)
+		AllowOverride None (인증 시스템을 사용할 수 있게 해줌 - 현재는 사용치 않음)
+		Order allow,deny (순서 : allow 먼저하고, deny 적용)
+		Allow from all (모두 접근 가능)
+		</Directory>
+	- Require
+		- all granted		: 모든 접근에 제한을 두지 않는다
+		- all denied		: 모든 접근을 제한한다.
+		- env env-var		: 해당 환경 변수만 접근 허용
+		- method http-method	: 해당 HTTP 메소드(get/post)만 허용
+		- expr expression		: 표현식이 참일때만 접근 허용
+		- user userid		: 사용자 아이디에 해다한하는 접근 허용
+		- group group-name	: 그룹에 해당하는 이름 접근 허용
+		- valid-user		: 허가된 사용자만 접근 허용
+### </Directory> 
+
+
+
+==================== 목록: 3 section ====================
+
+1. 전역 환경설정(Global Environment): 
+	- apache server 프로세스 전체의 운영에 직접적으로 제어할 수 있는 부분
+	- apache2.conf에서 설정: 웹서버가 시작될 때 configuration 파일들을 부르는 역할
+	- ports.conf: Listening 포트를 설정
+	- configuration 파일들 설정
+2. 기본서버 구성(Main server configuration): 
+	- 메인이나 디폴트 서버에 관한 설정을 관리하는 부분
+3. 가상호스트: 
+	- 가상 호스트에 대한 설정을 관리하는 부분
+	- /etc/apache2/sites-enabled/
+
+==========================================================
+
+## Section 1: Global Environment ##
+
+
+# ServerRoot: "/etc/apache2"
+	- 최상의 디렉토리, 서버의 설정, 에러, 로그가 담겨져 있다.
+
+# PidFile: "/etc/apache2/envvars"
+	- 서버가 시작할 때 프로세스 식별 번호(PID)를 담는 파일
+
+# Timeout: Timeout 300
+	- 클라이언트와 연결이 되었을 때 해당 시간 만큼 송수신을 하지면 발생
+
+# KeepAlive:  KeepAlive On 
+	- 접속한 채로 아무 반응이 없을 경우 지속적인 연결을 허용 여부 설정
+
+# MaxkeepAliveRequests: MaxKeepAliveRequests 100
+	- 지속적인 연결 동안에 서버에게 요청할 수 있는 최대 수
+	- 무제한 허용은 0 설정, 크면 클수록 최대 성능
+
+
+# KeepAliveTimeout: KeepAliveTimeout 15
+	- 같은 클라이언트의 같은 연결 상태에서 몇 초 동안 다음 요청을 기다릴 것인지 설정
+
+# 사용자 권한
+User:  "/etc/apache2/envvars/"
+Group:  "/etc/apache2/envvars/"
+	- 다른 유저나 그룹에서 사용하기를 원한다면 변경 후, apache 재시작
+
+# HostnameLookups: HostnameLookups Off
+	- 웹 서버의 로그를 지정하는 Format에서 "DNS Lookup"으로 지정하였을 때, domain or IP 주소로 남길 것이냐 차이
+	- Default(Off): IP에 주소를 남김, On: IP주소를 Domain 이름으로 변환 
+	- On은 Off보다 다소 느림
+
+# ErrorLog: "/var/log/apache2/error.log"
+	- 에러 로그 파일의 위치를 지정
+	- <VirtualHost>에 에러 로그가 지정되지 않으면 기본 로그 파일로 저장 됨
+
+# LogLevel: 
+	- 설정한 로그파일에 얼마나 상세히 메세지 수를 입력할지에 대한 설정
+	- 중요도 순서: debug > info > notice > warn > error > crit > alert > emerg
+
+# Include ports.conf: Listen 80
+	- 디폴트 이외에 특별한 IP 또는 포트에 대해서도 연결 할 수 있도록 허용
+	- <VirtualHost> 부분에서 설정되는 <VirtualHost>를 설정하기 위함
+
+# AccessFileName: .htaccess
+	- 디렉토리 별로 접근 제어할 정보를 담고 잇는 파일을 지정
+	- 인증을 거쳐서 접근할 수 있는 설정
+	- 웹 클라이언트가 .htaccess와 .htpsswd 파일을 볼 수 없도록 막은 설정
+		<FilesMatch "^\.ht">
+      		 	 Require all denied
+		</FilesMatch>
+
+==========================================================
+
+## Section 2: Main server configuration ##
+	"/etc/apache2/sistes-available/000-default.conf"
+	메인 서버가 사용하는 값 설정
+	<VirtualHost>에서 설정하지 않는 것은 여기서 지정된 기본값으로 적용
+	여기서 지정한 값을 <VirtualHost>내에서도 지정 가능, 이 경우에는 <VirtualHost>내에서 지정한 값이 우선 적용
+
+
+# ServerAdmin: ServerAdmin root@localhost
+	- 관리자의 메일 주소
+	- 문제 발생이 위 메일로 발송
+
+# ServerName: www.example.com:80
+	- Client에게 보여주는 host 이름을 지정. 
+	- DNS name이 유효하지 않아도 host에서는 사용하는 것처럼 보임
+	- DNS가 등록되지 않으념 IP주소를 여기에 입력
+
+# DocumentRoot: "/var/www/html"
+	- 웹 서버의 홈 디렉토리 
+
+# ErrorLog: logs/error_log
+	- 웹서버에 문제가 발생시에 에러를 기록하는 로그파일
+	- 상대경로 ServerRoot가 기준 디렉토리
+
+# CustomLog: logs/access_log combind
+	- 외부에서 접근한 기록에 대한 로그파일
+
+==========================================================
+
+## Section 3: VirtualHost ##
+	- 웹서버에는 기본적으로 존재하는 main host가 존재
+	- main host 외에 별도의 디렉토리를 가진 여러개의 virtualhost를 설정하여
+	- 하나의 서버로 여러 도메인을 제공하는 서비스
+	- section2의 기본설정 기반으로 오버라이드하여 재설정 하는 곳
+
+# Redirect:
+	- ServerName에서 잘못된 입력을 고려해 원래 주로 매칭해주는 기능
+	- 이 기능은 <VirtualHost>태그를 새로 만들어 사용해한다.
+
+# ServerAlias:
+	- ServerName말고 별칭을 사용해도 ServerName으로 매칭되게 하는 기능
+	- redirect와 달리 한번에 설정하게 해주지만 rewrite기능을 활성화해야한다.
+
+# RewirteEngine On / Off
+	- 사용여부 (default: Off)
+
+# UseCanonicalName: Off
+	- URL, SERVER_NAME, SERVER_PORT 변수가 어떻게 참조하는지 결정
+	- Off: hostname과 Port를 Client에게 제공
+	- On: ServerName값으로 직접 제공
+# UserDir: 
+	- 하나의 웹서버에서 여러 사용자의 홈페이지를 관리할 때 필요한 개별 디렉토리설정
+	- 경로의 마지막에는 웹서버의 userid가 접근할 수 있는 'public_html' 디렉토리가 반드시 있어야 한다.
+	- userid 711권한, userid/public_html 755권한
+
+
+# DirctoryIndex: 우선순위는 가장 앞에 입력된 단어
+	- 해당 홈 디렉토리의 메인 파일을 지정
+
+# .htaccess
+	- 웹서버 디렉토리 권한을 설정하는 파일
+
+
+
